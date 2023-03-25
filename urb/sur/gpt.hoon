@@ -1,12 +1,13 @@
 |%
 +$  conf
   [api-key=@t org=(unit cord)]
++$  role  ?(%system %user %assistant)
 ::
 ++  chat-mess
   =<  chat-mess
   |%
   +$  chat-mess
-    $:  role=?(%system %user %assistant)
+    $:  =role
         content=@t
     ==
   ++  enjs
