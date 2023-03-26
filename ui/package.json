@@ -1,0 +1,39 @@
+{
+  "name": "urbit-openai",
+  "version": "0.0.0",
+  "private": true,
+  "homepage": "/apps/gpt/",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build-prod": "cross-env APP=gpt vite build --mode production --base=/dist/",
+    "serve": "vite preview",
+    "copy-desk-zod": "rsync -a --delete ../gpt/ ../../ships/zod/gpt/",
+    "copy-desk-fm": "rsync -a --delete ../gpt/ ../../ships/fopwyt-doplyr/gpt/",
+    "copy-dist": "rsync -avL --delete ../gpt/ ../../ships/fopwyt-doplyr/gpt/",
+    "prettier": "prettier --write src/**/*.{js,jsx,css}"
+  },
+  "dependencies": {
+    "@tailwindcss/line-clamp": "^0.4.2",
+    "@urbit/http-api": "^2.3.0",
+    "font-awesome": "^4.7.0",
+    "immer": "^9.0.21",
+    "lodash": "^4.17.21",
+    "ramda": "^0.28.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router": "^6.9.0",
+    "react-router-dom": "^6.9.0",
+    "zustand": "^4.3.6"
+  },
+  "devDependencies": {
+    "@urbit/vite-plugin-urbit": "github:sethfork/vite-plugin-urbit#feat/vite3",
+    "@vitejs/plugin-react-refresh": "^1.3.1",
+    "autoprefixer": "^10.4.12",
+    "cross-env": "^7.0.3",
+    "postcss": "^8.4.18",
+    "prettier": "^2.8.4",
+    "tailwindcss": "^3.2.4",
+    "vite": "=3.1.0"
+  }
+}
