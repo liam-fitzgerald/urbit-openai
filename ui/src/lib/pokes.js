@@ -12,7 +12,7 @@ export const createPoke = (urbit, type) => async (data) => {
 };
 
 export const buildPoke = (type, data) => ({
-  app: 'gpt',
+  app: 'legion',
   mark: 'legion-command',
   json: {
     prompt: {
@@ -26,6 +26,33 @@ export const buildPoke = (type, data) => ({
   onSucccess: console.log,
   onError: console.error,
 });
+
+// a %watch
+export const watchPrompts = {
+  app: 'legion',
+  path: '/prompts',
+};
+// returns events of type
+// { "add": {
+//   id: <id-as-@da>,
+//   prompt: {
+//     parent: <parent-as-@da, or null>
+//     role: 'user' | 'assistant' | 'system'
+//     text: 'text of prompt or response
+//   }
+//
+//
+//  a %scry
+export const scryPrompts = (id) => ({
+  app: 'legion',
+  path: `/ancestry/${id}`
+});
+/// returns history of prompt as {
+//   [id-as-@da]: {
+//     parent: <parent-as-@da, or null>
+//     role: 'user' | 'assistant' | 'system'
+//     text: 'text of prompt or response
+//   }
 
 export const structurePokeData = (fields, data) =>
   reduce(

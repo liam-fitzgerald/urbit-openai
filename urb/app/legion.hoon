@@ -67,14 +67,16 @@
 ++  on-watch
   |=  =path
   ^+  main
-  !!
+  ?+  path  ~|(bad-watch/path !!)
+    [%prompts ~]  ?>(=(our src):bowl main)
+  ==
 ++  peek
   |=  =(pole knot)
   ^-  (unit (unit cage))
   ?+  pole  [~ ~]
     [%x %api-key ~]  ``noun+!>(api-key)
       [%x %ancestry id=@ ~]
-    ``noun+!>((trace-ancestry:legion (slav %da id.pole) prompts))
+    ``legion-prompts+!>((trace-ancestry:legion (slav %da id.pole) prompts))
   ==
 ::
 ++  on-agent
