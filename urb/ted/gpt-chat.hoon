@@ -2,28 +2,22 @@
 /+  strandio
 =,  strand=strand:spider
 |%
-++  conf
-  ^~  ^-  conf:gpt
-  ['sk-secret-key-goes-here' ~]
 ++  encode-header
+  |=  =conf:gpt
   ^-  header-list:http
   :~  [key='Authorization' value=(cat 3 'Bearer ' api-key:conf)]
       [key='Content-Type' value='application/json']
   ==
 ++  url  'https://api.openai.com/v1/chat/completions'
 ++  send-chat
-  |=  mess=@t
+  |=  [=conf:gpt req=chat-completion:req:gpt]
   =/  m  (strand ,chat-completion:res:gpt)
   =/  body=octs
     %-  as-octt:mimes:html
-    =-  ~&(- -)
     %-  en-json:html
-    %-  enjs-chat-completion:req:gpt
-    :-  'gpt-3.5-turbo'
-    [%user mess]~
+    (enjs-chat-completion:req:gpt req)
   =/  =request:http
-    [%'POST' url encode-header `body]
-  ~&  request/request
+    [%'POST' url (encode-header conf) `body]
   ;<  ~  bind:m  (send-request:strandio request)
   ;<  res=client-response:iris  bind:m
     take-client-response:strandio
@@ -37,8 +31,12 @@
 |=  =vase
 =/  m  (strand ^vase)
 ^-  form:m
-=+  !<([~ question=@t] vase)
-;<  res=chat-completion:res:gpt  bind:m  (send-chat question)
+=+  !<([~ req=chat-completion:req:gpt] vase)
+;<  api-key=@t  bind:m
+  (scry:strandio ,@t /gx/legion/api-key/noun)
+=/  =conf:gpt  [api-key ~]
+;<  res=chat-completion:res:gpt  bind:m  
+  (send-chat conf req)
 =/  response=@t
   content:message:(snag 0 choices.res)
 (pure:m !>(response))
