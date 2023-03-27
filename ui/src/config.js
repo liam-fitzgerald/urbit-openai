@@ -1,3 +1,5 @@
+import { Configuration } from 'openai';
+
 export const urbitConfig = {
   desk: 'gpt',
   path: '/gpt-chat',
@@ -10,3 +12,7 @@ export const authSubConfig = {
   code: window?.ship || process.env.REACT_APP_SHIP_CODE || '',
   verbose: true,
 };
+
+export const openAiConfig = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
