@@ -4,23 +4,23 @@
 =,  sur
 |%
 ++  ancestry-to-req
-  |=  [id=(unit @da) =prompts]
+  |=  [id=(unit @da) =msgs]
   ^-  (list chat-mess:gpt)
   ?~  id
     ~
-  =/  filtered  (tap:on:^prompts (trace-ancestry u.id prompts))
+  =/  filtered  (tap:on:^msgs (trace-ancestry u.id msgs))
   ~&  filtered
   %+  turn  filtered
-  |=  [@da =prompt]
-  [role.prompt text.prompt]
+  |=  [@da =msg]
+  [role text]:msg
 ::
 ++  trace-ancestry
-  =|  res=prompts
-  |=  [id=@da =prompts]
+  =|  res=msgs
+  |=  [id=@da =msgs]
   ^+  res
-  ?~  pro=(get:on:^prompts prompts id)
+  ?~  pro=(get:on:^msgs msgs id)
     res
-  =.  res  (put:on:^prompts res id u.pro)
+  =.  res  (put:on:^msgs res id u.pro)
   ?~  parent.u.pro
     res
   $(id u.parent.u.pro)

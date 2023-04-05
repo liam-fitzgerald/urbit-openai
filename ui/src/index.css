@@ -2,10 +2,3 @@
 @tailwind components;
 @tailwind utilities;
 
-.page-container {
-  background-color: #151515;
-}
-
-.text-offwhite {
-  color: #ebfffd;
-}

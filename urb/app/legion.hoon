@@ -5,8 +5,9 @@
 +$  state-0
   $:  %0
       api-key=@t
-      =prompts:legion
+      =msgs:legion
       heritage=(jug @da @da)
+      books=(map @uv book:legion)
   ==
 --
 =|  state-0
@@ -28,16 +29,22 @@
   ::  TODO: maybe give notice?
   ?-  -.command
     %set-api-key  main(api-key api-key.command)
-    %prompt       (on-prompt +.command) 
+    %msg       (on-msg +.command) 
+    %add-tale  (on-add-tale +.command)
   ==
-++  on-prompt
-  |=  [id=@da parent=(unit @da) text=@t]
-  =/  =prompt:legion  [parent %user text]
+++  on-add-tale
+  |=  [id=@uv =tale:legion]
+  ^+  main
+  =.  books  (~(put by books) id [~ tale])
+  main
+++  on-msg
+  |=  [id=@da tale=@uv parent=(unit @da) text=@t]
+  =/  =msg:legion  [tale parent %user text]
   =/  req=chat-completion:req:gpt
     :-  'gpt-3.5-turbo' 
-    (snoc (ancestry-to-req:legion parent prompts) [%user text])
-  =.  main  (save-prompt id prompt)
-  =/  =tid:rand  (cat 3 'prompt-' (scot %da id))
+    (snoc (ancestry-to-req:legion parent msgs) [%user text])
+  =.  main  (save-msg id msg)
+  =/  =tid:rand  (cat 3 'msg-' (scot %da id))
   %+  start-thread  id
   :*  ~
       `tid
@@ -46,13 +53,17 @@
       !>([~ req])
   ==
 ::
-++  save-prompt
-  |=  [id=@da =prompt:legion]
-  =.  prompts
-    (put:on:prompts:legion prompts id prompt)
-  =?  heritage  ?=(^ parent.prompt)
-    (~(put ju heritage) u.parent.prompt id)
-  (emit %give %fact ~[/prompts] legion-gift+!>([%add id prompt]))
+++  save-msg
+  |=  [id=@da =msg:legion]
+  =.  msgs
+    (put:on:msgs:legion msgs id msg)
+  =/  =book:legion  (~(got by books) tale.msg)
+  =.  msgs.book  (snoc msgs.book id)
+  =.  books
+    (~(put by books) tale.msg book)
+  =?  heritage  ?=(^ parent.msg)
+    (~(put ju heritage) u.parent.msg id)
+  (emit %give %fact ~[/msg] legion-gift+!>([%add id msg]))
 ::
 ++  start-thread
   |=  [id=@da =start-args:spider]
@@ -68,15 +79,28 @@
   |=  =path
   ^+  main
   ?+  path  ~|(bad-watch/path !!)
-    [%prompts ~]  ?>(=(our src):bowl main)
+    [%msg ~]  ?>(=(our src):bowl main)
   ==
+++  lore
+  ^-  lore:legion
+  %-  ~(run by books)
+  |=  [ids=(list @da) =tale:legion]
+  :_  tale
+  %+  turn  ids
+  |=  id=@da
+  (got:on:msgs:legion msgs id)
+::
 ++  peek
   |=  =(pole knot)
   ^-  (unit (unit cage))
   ?+  pole  [~ ~]
     [%x %api-key ~]  ``noun+!>(api-key)
+  ::
       [%x %ancestry id=@ ~]
-    ``legion-prompts+!>((trace-ancestry:legion (slav %da id.pole) prompts))
+    ``legion-msg+!>((trace-ancestry:legion (slav %da id.pole) msgs))
+  ::
+      [%x %lore ~]
+    ``legion-lore+!>(lore)
   ==
 ::
 ++  on-agent
@@ -96,9 +120,10 @@
       main
     =+  !<(result=@t q.cage.sign)
     =/  id=@da  now.bowl
-    =/  =prompt:legion  [`parent %assistant result]
+    =/  par=msg:legion  (got:on:msgs:legion msgs parent)
+    =/  =msg:legion  [tale.par `parent %assistant result]
     ~&  >  [id parent result]
-    (save-prompt id prompt)
+    (save-msg id msg)
   ::
        %kick
     ~&  %kick

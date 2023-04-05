@@ -27,6 +27,17 @@ export const buildPoke = (type, data) => ({
   onError: console.error,
 });
 
+export const buildPoke = (type, data) => ({
+  app: 'legion',
+  mark: 'legion-command',
+  json: {
+    'set-api-key': 'api-key-to-set'
+  },
+  onSucccess: console.log,
+  onError: console.error,
+});
+
+
 // a %watch
 export const watchPrompts = {
   app: 'legion',

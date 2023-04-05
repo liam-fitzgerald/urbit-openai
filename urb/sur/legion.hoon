@@ -1,21 +1,29 @@
 /-  gpt
 |%
++$  lore  (map @uv tome)
++$  book  [msgs=(list @da) tale]
++$  tome  [msgs=(list msg) tale]
++$  tale   
+  $:  title=@t
+      model=@t
+  ==
 +$  gift
-  $%  [%add id=@da =prompt]
+  $%  [%add id=@da =msg]
       [%del id=@da]
   ==
 +$  command
   $%  [%set-api-key api-key=@t]
-      [%prompt id=@da parent=(unit @da) text=@t]
+      [%msg id=@da tale=@uv parent=(unit @da) text=@t]
+      [%add-tale id=@uv =tale]
   ==
-+$  prompt
-  [parent=(unit @da) =role:gpt text=@t]
-++  prompts
-  =<  prompts
++$  msg
+  [tale=@uv parent=(unit @da) =role:gpt text=@t]
+++  msgs
+  =<  msgs
   |%
-  +$  prompts
-    ((mop @da prompt) lte)
+  +$  msgs
+    ((mop @da msg) lte)
   ++  on
-    ((ordered-map @da prompt) lte)
+    ((ordered-map @da msg) lte)
   --
 --

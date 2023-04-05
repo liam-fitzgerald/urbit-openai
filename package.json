@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@urbit/api": "^2.3.0"
+  }
+}

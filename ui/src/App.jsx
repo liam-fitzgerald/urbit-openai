@@ -1,36 +1,39 @@
-import React from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { useGptSubscription } from './state/useUrbitGpt';
-import Layout from './components/Layout';
-import 'font-awesome/css/font-awesome.min.css';
-import './index.css';
+import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Layout from "./components/Layout";
+import ChatInterface from "./components/ChatInterface";
+import ThreadList from "./components/ThreadList";
+import AddThread from "./components/AddThread";
+
+import "font-awesome/css/font-awesome.min.css";
+import "./index.css";
 
 const router = createBrowserRouter(
   [
     {
-      path: '/',
-      element: <Layout />,
+      path: "/",
+      element: <ThreadList />,
       children: [
         {
-          path: ':patp',
-          element: <User />,
+          path: "add",
+          element: <AddThread />,
+        },
+        {
+          path: ":id",
+          element: <ChatInterface />,
         },
       ],
     },
   ],
-  { basename: '/apps/gpt' }
+  { basename: "/apps/gpt" }
 );
 
 export function App() {
-  useGptSubscription();
-
   return (
     <React.Fragment>
-      <ThemeProvider theme={theme}>
-        <div className="page-container text-offwhite">
-          <RouterProvider router={router} icon={false} />
-        </div>
-      </ThemeProvider>
+      <div>
+        <RouterProvider router={router} icon={false} />
+      </div>
     </React.Fragment>
   );
 }

@@ -3,16 +3,35 @@
 ++  enjs
   =,  enjs:format
   |%
-  ++  prompts
-    |=  =prompts:leg
+  ++  lore
+    |=  =lore:leg
     %-  pairs
-    %+  turn  (tap:on:prompts:leg prompts)
-    |=  [id=@da p=prompt:leg]
-    [(scot %da id) (prompt p)]
-  ++  prompt
-    |=  p=prompt:leg
+    %+  turn  ~(tap by lore)
+    |=  [id=@uv msgs=(list msg:leg) t=tale:leg]
+    :-  (scot %uv id)
     %-  pairs
-    :~  parent/?~(parent.p ~ s/(scot %da u.parent.p))
+    :~  tale/(tale t)
+        :-  %msgs
+        :-  %a
+        (turn msgs msg)
+    ==
+  ++  tale
+    |=  t=tale:leg
+    %-  pairs
+    :~  title/s/title.t
+        model/s/model.t
+    ==
+  ++  msgs
+    |=  =msgs:leg
+    %-  pairs
+    %+  turn  (tap:on:msgs:leg msgs)
+    |=  [id=@da p=msg:leg]
+    [(scot %da id) (msg p)]
+  ++  msg
+    |=  p=msg:leg
+    %-  pairs
+    :~  tale/s/(scot %uv tale.p)
+        parent/?~(parent.p ~ s/(scot %da u.parent.p))
         role/s/role.p
         text/s/text.p
     ==
@@ -20,7 +39,7 @@
     |=  g=gift:leg
     %+  frond  -.g
     ?-  -.g
-      %add  (pairs id/s/(scot %da id.g) prompt/(prompt prompt.g) ~)
+      %add  (pairs id/s/(scot %da id.g) msg/(msg msg.g) ~)
       %del  s/(scot %da id.g)
     ==
   --
@@ -28,16 +47,31 @@
   =,  dejs:format
   |%
   ++  command
-    |=  c=command:leg
+    |=  jon=json
+    ^-  command:leg
+    ~|  jon/jon
+    %.  jon
     %-  of
     :~  set-api-key/so
-        prompt/command-prompt
+        msg/command-msg
+        add-tale/add-tale
     ==
-  ++  command-prompt
+  ++  add-tale
+    %-  ot
+    :~  id/(se %uv)
+        tale/tale
+    ==
+  ++  tale
+    %-  ot
+    :~  title/so
+        model/so
+    ==
+  ::
+  ++  command-msg
     %-  ot
     :~  id/(se %da)
+        tale/(se %uv)
         parent/(mu (se %da))
-        role/(su (perk %system %user %assistant ~))
         text/so
     ==
   --
