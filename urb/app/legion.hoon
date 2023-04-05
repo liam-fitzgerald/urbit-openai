@@ -53,6 +53,10 @@
       !>([~ req])
   ==
 ::
+++  give
+  |=  =gift:legion
+  (emit %give %fact ~[/msg] legion-gift+!>(gift))
+::
 ++  save-msg
   |=  [id=@da =msg:legion]
   =.  msgs
